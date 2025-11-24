@@ -1,8 +1,10 @@
-﻿using System.Text;
-using System.Text.Json;
+﻿using Microsoft.AspNetCore.SignalR;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using SOA.Domain.Events;
+using SOA.NotificationService.Hubs;
+using System.Text;
+using System.Text.Json;
 
 namespace SOA.NotificationService.Messaging;
 
@@ -13,16 +15,19 @@ public class GradeCreatedConsumer : BackgroundService
     private readonly HttpClient _httpClient;
     private IConnection? _connection;
     private IModel? _channel;
+    private GpaSseHub _gpaSseHub;
 
     public GradeCreatedConsumer(
         ILogger<GradeCreatedConsumer> logger,
         KafkaProducer kafkaProducer,
-        IHttpClientFactory httpClientFactory
+        IHttpClientFactory httpClientFactory,
+        GpaSseHub gpaSseHub
     )
     {
         _logger = logger;
         _kafkaProducer = kafkaProducer;
         _httpClient = httpClientFactory.CreateClient("faas");
+        _gpaSseHub = gpaSseHub;
     }
 
     protected override Task ExecuteAsync(CancellationToken cancellationToken)
@@ -68,6 +73,19 @@ public class GradeCreatedConsumer : BackgroundService
                     var bodyText = await response.Content.ReadAsStringAsync(cancellationToken);
 
                     _logger.LogInformation("FaaS OK: {Body}", bodyText);
+
+                    double gpa = JsonSerializer.Deserialize<JsonElement>(bodyText).GetProperty("gpa").GetDouble();
+
+                    var payload = JsonSerializer.Serialize(new
+                    {
+                        studentId = message?.StudentId,
+                        course = message?.Course,
+                        gpa
+                    });
+
+                    await _gpaSseHub.BroadcastAsync(payload, cancellationToken);
+
+                    _logger.LogInformation("Broadcasted GPA via SSE: {Payload}", payload);
                 }
             }
             catch (Exception exception)

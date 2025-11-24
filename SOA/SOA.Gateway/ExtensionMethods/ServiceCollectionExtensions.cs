@@ -52,6 +52,10 @@ public static class ServiceCollectionExtensions
             client.BaseAddress = new Uri(configuration["Services:Grades"]!);
         });
 
+        services.AddHttpClient("Notifications", c => 
+            c.BaseAddress = new Uri("http://notification-service:8080")
+        );
+
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>

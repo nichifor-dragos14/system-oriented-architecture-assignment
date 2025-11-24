@@ -59,7 +59,7 @@ public class GpaHandler
         }
     }
 
-    private int ComputeAverage(List<int> grades)
+    private double ComputeAverage(List<int> grades)
     {
         return grades.Sum(g => g) / grades.Count;
     }
