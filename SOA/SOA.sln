@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.Gateway", "SOA.Gateway\SOA.Gateway.csproj", "{636D34A8-CD01-4E47-BDD9-5E8202736990}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.Domain", "SOA.Domain\SOA.Domain.csproj", "{27BB905E-0D7E-4E4A-B158-9F3D24E8F4B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.Infrastructure", "SOA.Infrastructure\SOA.Infrastructure.csproj", "{3CD434E7-BD49-41A7-82BE-71D5F701F10B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.Dto", "SOA.Dto\SOA.Dto.csproj", "{6F47E6AD-07F6-4C3D-AED9-194E003A47AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.StudentService", "SOA.StudentService\SOA.StudentService.csproj", "{789ABF11-DEF4-4F6E-9868-92CC256A65D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.GradeService", "SOA.GradeService\SOA.GradeService.csproj", "{EC82E2D6-15E1-442B-B877-C2922015B897}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{636D34A8-CD01-4E47-BDD9-5E8202736990}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{636D34A8-CD01-4E47-BDD9-5E8202736990}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{636D34A8-CD01-4E47-BDD9-5E8202736990}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{636D34A8-CD01-4E47-BDD9-5E8202736990}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27BB905E-0D7E-4E4A-B158-9F3D24E8F4B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27BB905E-0D7E-4E4A-B158-9F3D24E8F4B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27BB905E-0D7E-4E4A-B158-9F3D24E8F4B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27BB905E-0D7E-4E4A-B158-9F3D24E8F4B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CD434E7-BD49-41A7-82BE-71D5F701F10B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CD434E7-BD49-41A7-82BE-71D5F701F10B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CD434E7-BD49-41A7-82BE-71D5F701F10B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CD434E7-BD49-41A7-82BE-71D5F701F10B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F47E6AD-07F6-4C3D-AED9-194E003A47AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F47E6AD-07F6-4C3D-AED9-194E003A47AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F47E6AD-07F6-4C3D-AED9-194E003A47AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F47E6AD-07F6-4C3D-AED9-194E003A47AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{789ABF11-DEF4-4F6E-9868-92CC256A65D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{789ABF11-DEF4-4F6E-9868-92CC256A65D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{789ABF11-DEF4-4F6E-9868-92CC256A65D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{789ABF11-DEF4-4F6E-9868-92CC256A65D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC82E2D6-15E1-442B-B877-C2922015B897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC82E2D6-15E1-442B-B877-C2922015B897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC82E2D6-15E1-442B-B877-C2922015B897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC82E2D6-15E1-442B-B877-C2922015B897}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF914D7E-9953-4B67-9229-B9739F77451E}
+	EndGlobalSection
+EndGlobal

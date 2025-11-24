@@ -1,0 +1,66 @@
+# Build and release folders
+bin/
+obj/
+out/
+publish/
+*.exe
+*.dll
+*.pdb
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vscode/
+.idea/
+*.swp
+
+# Visual Studio
+.vs/
+*.dbmdl
+*.bak
+*.backup
+*.opendb
+*.cache
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Dependency folders
+node_modules/
+packages/
+wwwroot/lib/
+
+# Docker
+docker-compose.override.yml
+*.pid
+*.seed
+*.tar
+*.img
+*.log
+*.lock
+.env
+
+# EF Core migrations backups
+Migrations/obj/
+Migrations/bin/
+
+# Sensitive files
+appsettings.Development.json
+secrets.json
+*.pem
+*.crt
+*.key
+*.pfx
+
+# Publish and temporary data
+logs/
+data/
+uploads/
+storage/
+tmp/
