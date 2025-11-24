@@ -12,5 +12,39 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq-soa
+    environment:
+      RABBITMQ_DEFAULT_USER: soa
+      RABBITMQ_DEFAULT_PASS: soa
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/mnesia
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redpanda:
+    image: redpandadata/redpanda:latest
+    command:
+      - redpanda start
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+      - --node-id 0
+      - --check=false
+      - --kafka-addr 0.0.0.0:9092
+      - --advertise-kafka-addr 127.0.0.1:9092
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+
 volumes:
   pg_data:
+  rabbitmq_data:

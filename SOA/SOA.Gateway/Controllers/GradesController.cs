@@ -26,7 +26,7 @@ public class GradesController : ControllerBase
     }
 
     [HttpPost()]
-    [Authorize(Roles = "Professor")]
+    //[Authorize(Roles = "Professor")]
     public async Task<IActionResult> AddGrade([FromBody] CreateGradeDto createGradeDto, CancellationToken cancellationToken)
     {
         var ok = await _gradesServiceClient.AddGradeAsync(createGradeDto, cancellationToken);

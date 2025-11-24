@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.StudentService", "SOA.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.GradeService", "SOA.GradeService\SOA.GradeService.csproj", "{EC82E2D6-15E1-442B-B877-C2922015B897}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.NotificationService", "SOA.NotificationService\SOA.NotificationService.csproj", "{7C271303-50C2-45F0-8F8E-3F601B0546DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA.Functions", "SOA.Functions\SOA.Functions.csproj", "{761BFCBC-C0D1-4986-8354-340FF930D79A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{EC82E2D6-15E1-442B-B877-C2922015B897}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC82E2D6-15E1-442B-B877-C2922015B897}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC82E2D6-15E1-442B-B877-C2922015B897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C271303-50C2-45F0-8F8E-3F601B0546DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C271303-50C2-45F0-8F8E-3F601B0546DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C271303-50C2-45F0-8F8E-3F601B0546DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C271303-50C2-45F0-8F8E-3F601B0546DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{761BFCBC-C0D1-4986-8354-340FF930D79A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{761BFCBC-C0D1-4986-8354-340FF930D79A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{761BFCBC-C0D1-4986-8354-340FF930D79A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{761BFCBC-C0D1-4986-8354-340FF930D79A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

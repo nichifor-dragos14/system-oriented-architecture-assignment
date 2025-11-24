@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SOA.GradeService.EntityFramework;
+using SOA.GradeService.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<GradesDbContext>(opt =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<GradeEventPublisher>();
 
 var app = builder.Build();
 

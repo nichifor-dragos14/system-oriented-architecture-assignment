@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SOA.Domain.Events;
 using SOA.Domain.Grade;
+using SOA.Domain.Student;
 using SOA.Dto.Grade;
 using SOA.GradeService.EntityFramework;
+using SOA.GradeService.Messaging;
 
 namespace SOA.GradeService.Controllers;
 
@@ -11,8 +14,16 @@ namespace SOA.GradeService.Controllers;
 public class GradeController : ControllerBase
 {
     private readonly GradesDbContext _dbContext;
+    private readonly GradeEventPublisher _gradeEventPublisher;
 
-    public GradeController(GradesDbContext dbContext) => _dbContext = dbContext;
+    public GradeController(
+        GradesDbContext dbContext,
+        GradeEventPublisher gradeEventPublisher
+    )
+    {
+        _dbContext = dbContext;
+        _gradeEventPublisher = gradeEventPublisher;
+    }
 
     // GET /api/grades/student/{studentId}
     [HttpGet("student/{studentId:guid}")]
@@ -46,6 +57,16 @@ public class GradeController : ControllerBase
 
         _dbContext.Grades.Add(grade);
         await _dbContext.SaveChangesAsync();
+
+        var studentGrades = await _dbContext.Grades
+            .AsNoTracking()
+            .Where(g => g.StudentId == grade.StudentId && g.Course == grade.Course)
+            .Select(g => g.Value)
+            .ToListAsync();
+
+        var gradeCreatedGpaEvent = new GradeCreatedGpaEvent(grade.Value, grade.StudentId, grade.Course, studentGrades, DateTime.UtcNow);
+
+        _gradeEventPublisher.PublishGradeCreated(gradeCreatedGpaEvent);
 
         return NoContent();
     }
