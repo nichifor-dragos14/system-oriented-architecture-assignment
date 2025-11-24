@@ -71,6 +71,9 @@ services:
       dockerfile: SOA.Functions/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker"
+      Logging__LogLevel__Default: "Information"
+      Logging__LogLevel__Microsoft: "Warning"
+      Logging__LogLevel__Worker: "Information"
     expose:
       - "80"
     networks: [private]
@@ -83,6 +86,21 @@ services:
       POSTGRES_PASSWORD: root
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks: [private]
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "127.0.0.1:5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+      - ./pgadmin/.pgpass:/tmp/pgpass-host:ro 
+    depends_on:
+      - postgres
     networks: [private]
 
   rabbitmq:
@@ -119,3 +137,4 @@ services:
 
 volumes:
   pg_data:
+  pgadmin_data:

@@ -53,15 +53,21 @@ public class GradeCreatedConsumer : BackgroundService
 
             try
             {
-                var resp = await _httpClient.PostAsync(
+                var response = await _httpClient.PostAsync(
                     "/api/compute-gpa",
                     new StringContent(json, Encoding.UTF8, "application/json"),
                     cancellationToken
                 );
 
-                if (!resp.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogWarning("FaaS returned {Status}", resp.StatusCode);
+                    _logger.LogWarning("FaaS returned {Status}", response.StatusCode);
+                }
+                else
+                {
+                    var bodyText = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                    _logger.LogInformation("FaaS OK: {Body}", bodyText);
                 }
             }
             catch (Exception exception)
