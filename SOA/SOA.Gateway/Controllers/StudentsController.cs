@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SOA.Gateway.Clients;
 
 namespace SOA.Gateway.Controllers;
@@ -15,6 +16,7 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetGradesForStudent(CancellationToken cancellationToken)
     {
         var students = await _studentsServiceClient.GetAllStudentsAsync(cancellationToken);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SOA.Gateway.Authentication;
 using SOA.Gateway.Clients;
 using System.Text;
@@ -34,7 +35,10 @@ public static class ServiceCollectionExtensions
                     ClockSkew = TimeSpan.FromMinutes(1),
                 };
             });
-        services.AddAuthorization();
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy("ProfessorOnly", policy => policy.RequireRole("Professor"))
+            .AddPolicy("StudentOnly", policy => policy.RequireRole("Student"));
 
         services.AddScoped<TokenService>();
 
@@ -50,7 +54,34 @@ public static class ServiceCollectionExtensions
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "SOA Gateway API", Version = "v1" });
+
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Description = "Enter: Bearer {your JWT token}",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT"
+            };
+
+            c.AddSecurityDefinition("Bearer", securityScheme);
+
+            var securityRequirement = new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                    },
+                    Array.Empty<string>()
+                }
+            };
+            c.AddSecurityRequirement(securityRequirement);
+        });
 
         return services;
     }

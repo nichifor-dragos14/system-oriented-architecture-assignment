@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SOA.Dto.Grade;
 using SOA.Gateway.Clients;
 
@@ -16,6 +17,7 @@ public class GradesController : ControllerBase
     }
 
     [HttpGet("student/{studentId:guid}")]
+    [Authorize]
     public async Task<IActionResult> GetGradesForStudent([FromRoute] Guid studentId, CancellationToken cancellationToken)
     {
         var grades = await _gradesServiceClient.GetGradesForStudentAsync(studentId, cancellationToken);
@@ -24,6 +26,7 @@ public class GradesController : ControllerBase
     }
 
     [HttpPost()]
+    [Authorize(Roles = "Professor")]
     public async Task<IActionResult> AddGrade([FromBody] CreateGradeDto createGradeDto, CancellationToken cancellationToken)
     {
         var ok = await _gradesServiceClient.AddGradeAsync(createGradeDto, cancellationToken);
@@ -33,6 +36,7 @@ public class GradesController : ControllerBase
 
     // PUT api/gateway/grades/{gradeId}
     [HttpPut("grades/{gradeId:guid}")]
+    [Authorize(Roles = "Professor")]
     public async Task<IActionResult> UpdateGrade([FromRoute] Guid gradeId, [FromBody] UpdateGradeDto updateGradeDto, CancellationToken cancellationToken)
     {
         var ok = await _gradesServiceClient.UpdateGradeAsync(gradeId, updateGradeDto, cancellationToken);
@@ -42,6 +46,7 @@ public class GradesController : ControllerBase
 
     // DELETE api/gateway/grades/{gradeId}
     [HttpDelete("grades/{gradeId:guid}")]
+    [Authorize(Roles = "Professor")]
     public async Task<IActionResult> DeleteGrade([FromRoute] Guid gradeId, CancellationToken cancellationToken)
     {
         var ok = await _gradesServiceClient.DeleteGradeAsync(gradeId, cancellationToken);

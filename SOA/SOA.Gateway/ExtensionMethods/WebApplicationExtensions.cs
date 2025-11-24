@@ -6,7 +6,11 @@ public static class WebApplicationExtensions
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+
         app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapControllers();
 
