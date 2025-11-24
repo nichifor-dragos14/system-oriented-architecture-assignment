@@ -56,7 +56,22 @@ public static class ServiceCollectionExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "SOA Gateway API", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "SOA Gateway API",
+                Version = "v1",
+                Description = "Gateway service providing secure routing and aggregation for SOA microservices",
+                Contact = new OpenApiContact
+                {
+                    Name = "SOA Project",
+                    Email = "support@soa.local"
+                }
+            });
+
+            c.SwaggerGeneratorOptions = new Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorOptions
+            {
+                SwaggerDocs = { { "v1", new OpenApiInfo { Title = "SOA Gateway API", Version = "v1" } } }
+            };
 
             var securityScheme = new OpenApiSecurityScheme
             {
@@ -71,15 +86,16 @@ public static class ServiceCollectionExtensions
             c.AddSecurityDefinition("Bearer", securityScheme);
 
             var securityRequirement = new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
             {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                    },
-                    Array.Empty<string>()
-                }
-            };
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    };
+
             c.AddSecurityRequirement(securityRequirement);
         });
 

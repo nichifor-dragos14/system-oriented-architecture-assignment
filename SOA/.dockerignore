@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+**/*.user
+**/*.csproj.user
+**/*.suo
+**/*.swp
+.vscode/
+.vs/
+.git/
+.gitignore
