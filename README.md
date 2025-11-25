@@ -39,6 +39,18 @@ ng build professor-ui --configuration production
 
 # Return to project root
 cd ../..
+```bash
 
-# Run docker
+### 🐋 Step 2 — Start All Containers
+```bash
 docker compose up --build
+```bash
+
+## 🧭 Step 3 — Access the System
+
+| Service                   | URL                                                          | Description                             |
+| ------------------------- | ------------------------------------------------------------ | --------------------------------------- |
+| 🧑‍🎓 **Student UI**      | [http://localhost/students/](http://localhost/students/)     | Student dashboard and GPA viewer        |
+| 🧑‍🏫 **Professor UI**    | [http://localhost/professors/](http://localhost/professors/) | Grade management interface              |
+| 🧩 **Gateway API**        | [http://localhost/swagger/index.html](http://localhost/swagger/index.html)               | REST API + SSE endpoints                |
+| 🐘 **pgAdmin**            | [http://localhost:5050](http://localhost:5050)               | (user: `admin@admin.com`, pass: `root`) |
