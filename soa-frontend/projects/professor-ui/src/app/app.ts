@@ -1,11 +1,17 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: true,
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  template: `
+    <nav>
+      <a [routerLink]="['/login']" routerLinkActive="active">Login</a>
+      <a [routerLink]="['/dashboard']" routerLinkActive="active">Dashboard</a>
+    </nav>
+    <router-outlet></router-outlet>
+  `,
 })
 export class App {
   protected readonly title = signal('professor-ui');
