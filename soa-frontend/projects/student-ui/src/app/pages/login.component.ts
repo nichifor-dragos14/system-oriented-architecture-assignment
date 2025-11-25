@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -121,7 +122,11 @@ export class LoginComponent {
   submitting = false;
   showPassword = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   submit() {
     if (this.submitting) {
@@ -130,9 +135,13 @@ export class LoginComponent {
     
     this.error = '';
     this.submitting = true;
+    this.cdr.detectChanges();
 
     this.auth.login(this.email, this.password)
-      .pipe(finalize(() => { this.submitting = false; }))
+      .pipe(finalize(() => { 
+        this.submitting = false; 
+        this.cdr.detectChanges();
+      }))
       .subscribe({
         next: (response: any) => {
           this.auth.setToken(response.accessToken);
@@ -141,6 +150,7 @@ export class LoginComponent {
           if (role && role !== 'Student') {
             this.error = 'Not a Student account.';
             this.auth.logout();
+            this.cdr.detectChanges(); 
             return;
           }
 
@@ -149,6 +159,7 @@ export class LoginComponent {
         error: (e) => {
           console.error('Login error', e);
           this.error = e?.error?.message || 'Invalid credentials';
+          this.cdr.detectChanges(); 
         }
       });
   }
