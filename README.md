@@ -39,12 +39,12 @@ ng build professor-ui --configuration production
 
 # Return to project root
 cd ../..
-```bash
+```
 
 ### 🐋 Step 2 — Start All Containers
 ```bash
 docker compose up --build
-```bash
+```
 
 ## 🧭 Step 3 — Access the System
 
