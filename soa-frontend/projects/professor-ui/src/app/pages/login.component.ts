@@ -3,6 +3,7 @@ import { AuthService } from '../core/auth.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -49,7 +50,7 @@ import { CommonModule } from '@angular/common';
             <small *ngIf="f.submitted && !password" class="hint">Password is required.</small>
           </div>
 
-          <button class="submit" [disabled]="submitting || !email || !password">
+          <button class="submit" type="submit" [disabled]="submitting || !email || !password">
             <span *ngIf="!submitting">Login</span>
             <span *ngIf="submitting" class="spinner" aria-hidden="true"></span>
           </button>
@@ -126,27 +127,29 @@ export class LoginComponent {
     if (this.submitting) {
       return;
     }
-    
+
+    this.error = '';
     this.submitting = true;
 
-    this.auth.login(this.email, this.password).subscribe({
-      next: (response: any) => {
-        this.auth.setToken(response.accessToken);
-        const role = this.auth.role();
+    this.auth.login(this.email, this.password)
+      .pipe(finalize(() => { this.submitting = false; }))
+      .subscribe({
+        next: (response: any) => {
+          this.auth.setToken(response.accessToken);
+          const role = this.auth.role();
 
-        if (role && role !== 'Professor') {
-          this.error = 'Not a Professor account.';
-          this.auth.logout();
-          this.submitting = false;
-          return;
+          if (role && role !== 'Professor') {
+            this.error = 'Not a Professor account.';
+            this.auth.logout();
+            return;
+          }
+
+          this.router.navigateByUrl('/dashboard');
+        },
+        error: (e) => {
+          console.error('Login error', e);
+          this.error = e?.error?.message || 'Invalid credentials';
         }
-
-        this.router.navigateByUrl('/dashboard');
-      },
-      error: () => {
-        this.error = 'Invalid credentials';
-        this.submitting = false;
-      }
-    });
+      });
   }
 }

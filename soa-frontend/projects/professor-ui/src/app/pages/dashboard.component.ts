@@ -142,7 +142,6 @@ export class DashboardComponent implements OnInit {
   grades = signal<GradeDto[]>([]);
   gradesLoading = signal<boolean>(false);
 
-
   editId = signal<string | null>(null);
   course = '';
   value: number | null = null;
@@ -212,8 +211,8 @@ export class DashboardComponent implements OnInit {
 
     if (this.editId()) {
       this.api.updateGrade(this.editId()!, body).subscribe({
-        next: g => {
-          this.grades.update(list => list.map(x => x.id === g.id ? g : x));
+        next: () => {
+          this.loadGrades(studentId);
           this.resetEditor();
           done();
         },
@@ -221,8 +220,8 @@ export class DashboardComponent implements OnInit {
       });
     } else {
       this.api.addGrade(body).subscribe({
-        next: g => {
-          this.grades.update(list => [g, ...list]);
+        next: () => {
+          this.loadGrades(studentId);
           this.resetEditor();
           done();
         },
@@ -233,9 +232,10 @@ export class DashboardComponent implements OnInit {
 
   remove(g: GradeDto) {
     if (!confirm(`Delete grade ${g.course} (${g.value})?`)) return;
+    const studentId = this.selectedId();
     this.api.deleteGrade(g.id).subscribe({
       next: () => {
-        this.grades.update(list => list.filter(x => x.id !== g.id));
+        if (studentId) this.loadGrades(studentId);
       },
       error: e => { console.error(e); this.error.set('Delete failed.'); }
     });

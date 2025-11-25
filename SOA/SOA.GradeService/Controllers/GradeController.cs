@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SOA.Domain.Events;
 using SOA.Domain.Grade;
-using SOA.Domain.Student;
 using SOA.Dto.Grade;
 using SOA.GradeService.EntityFramework;
 using SOA.GradeService.Messaging;
@@ -58,15 +57,7 @@ public class GradeController : ControllerBase
         _dbContext.Grades.Add(grade);
         await _dbContext.SaveChangesAsync();
 
-        var studentGrades = await _dbContext.Grades
-            .AsNoTracking()
-            .Where(g => g.StudentId == grade.StudentId && g.Course == grade.Course)
-            .Select(g => g.Value)
-            .ToListAsync();
-
-        var gradeCreatedGpaEvent = new GradeCreatedGpaEvent(grade.Value, grade.StudentId, grade.Course, studentGrades, DateTime.UtcNow);
-
-        _gradeEventPublisher.PublishGradeCreated(gradeCreatedGpaEvent);
+        await PrepareToPublishEvent(grade);
 
         return NoContent();
     }
@@ -86,6 +77,8 @@ public class GradeController : ControllerBase
         existing.Value = updateGradeDto.Value;
         await _dbContext.SaveChangesAsync();
 
+        await PrepareToPublishEvent(existing);
+
         return NoContent();
     }
 
@@ -101,9 +94,32 @@ public class GradeController : ControllerBase
             return NotFound(); 
         }
 
+        var gradeToPublish = new Grade
+        {
+            Id = grade.Id,
+            Course = grade.Course,
+            Value = 0,
+            StudentId = grade.StudentId,
+        };
+
         _dbContext.Grades.Remove(grade);
         await _dbContext.SaveChangesAsync();
 
+        await PrepareToPublishEvent(gradeToPublish);
+
         return NoContent();
+    }
+
+    private async Task PrepareToPublishEvent(Grade grade)
+    {
+        var studentGrades = await _dbContext.Grades
+            .AsNoTracking()
+            .Where(g => g.StudentId == grade.StudentId && g.Course == grade.Course)
+            .Select(g => g.Value)
+            .ToListAsync();
+
+        var gradeCreatedGpaEvent = new GradeCreatedGpaEvent(grade.Value, grade.StudentId, grade.Course, studentGrades, DateTime.UtcNow);
+
+        _gradeEventPublisher.PublishGradeCreated(gradeCreatedGpaEvent);
     }
 }

@@ -25,13 +25,16 @@ public class StudentController : ControllerBase
             .AsNoTracking()
             .ToListAsync();
 
-        return Ok(students.Select(student => new StudentDto
-            {
-                Id = student.Id,
-                Name = student.Name,
-                Email = student.Email,
-                Role = student.Role,
-            })
+        return Ok(students
+            .Where(student => student.Role == Role.Student)
+            .Select(student => new StudentDto
+                {
+                    Id = student.Id,
+                    Name = student.Name,
+                    Email = student.Email,
+                    Role = student.Role,
+                }
+            )
         );
     }
 
