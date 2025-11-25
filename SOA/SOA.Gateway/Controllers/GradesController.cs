@@ -35,7 +35,7 @@ public class GradesController : ControllerBase
     }
 
     // PUT api/gateway/grades/{gradeId}
-    [HttpPut("grades/{gradeId:guid}")]
+    [HttpPut("{gradeId:guid}")]
     [Authorize(Roles = "Professor")]
     public async Task<IActionResult> UpdateGrade([FromRoute] Guid gradeId, [FromBody] UpdateGradeDto updateGradeDto, CancellationToken cancellationToken)
     {
@@ -45,7 +45,7 @@ public class GradesController : ControllerBase
     }
 
     // DELETE api/gateway/grades/{gradeId}
-    [HttpDelete("grades/{gradeId:guid}")]
+    [HttpDelete("{gradeId:guid}")]
     [Authorize(Roles = "Professor")]
     public async Task<IActionResult> DeleteGrade([FromRoute] Guid gradeId, CancellationToken cancellationToken)
     {
