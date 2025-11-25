@@ -1,0 +1,25 @@
+@startuml
+title Class Diagram - Student & Grade
+
+class Student {
+  + id: UUID
+  + role: Role
+  + name: string
+  + email: string
+}
+
+class Grade {
+  + id: UUID
+  + studentId: UUID
+  + course: string
+  + value: int
+}
+
+' Relationships
+Student "1" -- "0..*" Grade : has >
+
+' Optional constraints/notes
+note right of Grade
+  studentId references Student.id
+end note
+@enduml

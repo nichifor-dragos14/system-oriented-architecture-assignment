@@ -1,0 +1,36 @@
+@startuml
+title Sequence — Add Grade and Live GPA Update (SSE)
+
+actor Professor
+participant "Professor UI (Angular)" as ProfUI
+participant "NGINX" as Nginx
+participant "Gateway (.NET)" as Gateway
+participant "GradeService" as GradeSvc
+participant "RabbitMQ" as RMQ
+participant "NotificationService (SSE)" as Notify
+participant "GPA Function (FaaS)" as FaaS
+participant "Redpanda" as RP
+actor Student
+participant "Student UI (Angular)" as StudUI
+
+' Professor adds a grade
+Professor -> ProfUI: Submit new grade (course, value, studentId)
+ProfUI -> Nginx: POST /api/Grades
+Nginx -> Gateway: POST /Grades (JWT)
+Gateway -> GradeSvc: Create grade
+GradeSvc -> RMQ: Publish GradeCreated event
+GradeSvc --> Gateway: 201 Created
+Gateway --> Nginx: 201 Created
+Nginx --> ProfUI: 201 Created
+
+' Notifications pipeline
+RMQ -> Notify: GradeCreated event
+Notify -> FaaS: Invoke GPA calculation (studentId)
+FaaS -> RP: Stream GPAUpdate event
+Notify -> StudUI: SSE data: GPAUpdate (course, gpa)
+
+' Student sees live update
+Student -> StudUI: (listening via EventSource)
+StudUI <-- Notify: onmessage → update UI
+
+@enduml

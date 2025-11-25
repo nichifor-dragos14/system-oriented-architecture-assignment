@@ -1,0 +1,36 @@
+@startuml
+' C4-PlantUML Deployment
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+TITLE SOA Platform — C4 Deployment (Docker Compose)
+
+Deployment_Node(dockerhost, "Docker Host", "Local machine") {
+  Deployment_Node(edge, "edge network") {
+    Container(nginx, "nginx:alpine", "NGINX", "Serves SPAs; reverse proxy /api")
+    Container(gateway, "gateway", ".NET 8 Web API", "JWT-secured API façade")
+  }
+
+  Deployment_Node(private, "private network") {
+    Container(studentService, "student-service", ".NET 8 Service", "")
+    Container(gradeService, "grade-service", ".NET 8 Service", "")
+    Container(notificationService, "notification-service", ".NET Worker", "SSE broadcaster")
+    Container(faas, "gpa-function", ".NET 8", "FaaS GPA calc")
+    ContainerDb(pg, "postgres:16", "PostgreSQL", "soa DB")
+    Container(rmq, "rabbitmq:3.13-management", "RabbitMQ", "broker")
+    Container(rp, "redpanda", "Redpanda", "Kafka-compatible streaming")
+  }
+}
+
+Rel(nginx, gateway, "HTTP")
+Rel(gateway, studentService, "HTTP")
+Rel(gateway, gradeService, "HTTP")
+Rel(gateway, notificationService, "HTTP/SSE")
+Rel(gradeService, rmq, "Publishes")
+Rel(notificationService, rmq, "Consumes")
+Rel(notificationService, faas, "Invokes")
+Rel(faas, rp, "Produces")
+Rel(studentService, pg, "ADO.NET")
+Rel(gradeService, pg, "ADO.NET")
+
+SHOW_LEGEND()
+@enduml

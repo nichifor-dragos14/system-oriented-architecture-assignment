@@ -1,0 +1,43 @@
+@startuml
+' C4-PlantUML Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+TITLE Academic Platform — C2 Containers
+
+Person(professor, "Professor")
+Person(student, "Student")
+
+System_Boundary(soa, "SOA Academic Platform") {
+  Container(nginx, "NGINX", "Reverse Proxy", "Serves Angular SPAs; proxies /api/* to Gateway; SSE-friendly")
+  Container(gateway, "Gateway", ".NET 8 Web API", "JWT-secured REST API façade and aggregator")
+  Container(studentService, "Student Service", ".NET 8", "Student data: id, role, name, email")
+  Container(gradeService, "Grade Service", ".NET 8", "CRUD grades; publishes events")
+  Container(notificationService, "Notification Service", ".NET Worker + SSE", "Consumes RabbitMQ events; streams GPA via SSE")
+  Container(faas, "GPA Function", ".NET 8 FaaS", "Calculates GPAs from events")
+  ContainerDb(db, "PostgreSQL", "RDBMS", "Persistent store for students and grades")
+  Container(rabbitmq, "RabbitMQ", "Message Broker", "Async communication")
+  Container(redpanda, "Redpanda", "Event Streaming", "Kafka-compatible streaming (analytics/fanout)")
+  Container(studentUI, "Student UI", "Angular SPA", "Login, grades view, live GPA (SSE)")
+  Container(profUI, "Professor UI", "Angular SPA", "View students; add/update/delete grades")
+}
+
+Rel(professor, profUI, "Uses", "HTTPS")
+Rel(student, studentUI, "Uses", "HTTPS")
+Rel(profUI, nginx, "HTTP", "/professors/*")
+Rel(studentUI, nginx, "HTTP", "/students/*")
+
+Rel(nginx, gateway, "Proxies /api/*", "HTTP/1.1 (no buffering for SSE)")
+Rel(gateway, studentService, "REST", "HTTP")
+Rel(gateway, gradeService, "REST", "HTTP")
+Rel(gateway, notificationService, "SSE subscribe", "HTTP")
+
+Rel(gradeService, rabbitmq, "Publishes grade events")
+Rel(notificationService, rabbitmq, "Consumes grade events")
+Rel(notificationService, faas, "Invokes GPA calculation")
+Rel(faas, redpanda, "Streams GPA events")
+
+Rel(studentService, db, "Reads/Writes")
+Rel(gradeService, db, "Reads/Writes")
+
+SHOW_LEGEND()
+@enduml

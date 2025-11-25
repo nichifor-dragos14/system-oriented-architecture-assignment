@@ -1,0 +1,19 @@
+@startuml
+title SOA Academic Platform - C1 System Context
+
+actor Professor as professor
+actor Student as student
+
+rectangle "SOA Platform\n(Student & Professor Management System)" as soa
+
+professor --> soa : Uses via web (HTTP)
+student   --> soa : Uses via web (HTTP)
+
+legend right
+  Actors:
+    - Professor: manages student grades
+    - Student: views grades and GPA
+  System:
+    - SOA Platform: grades, viewing, GPA streaming
+endlegend
+@enduml

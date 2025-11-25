@@ -1,0 +1,21 @@
+@startuml
+' C4-PlantUML Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+TITLE SOA Gateway — C3 Components
+
+Container_Boundary(gw, "Gateway (.NET 8 Web API)") {
+  Component(auth, "Authentication & Authorization", "Middleware", "Validates JWT; enforces roles (Student/Professor)")
+  Component(gradesApi, "GradesController", "Web API Controller + SSE Endpoint", "Endpoints for grade CRUD via GradeService + Server-Sent Events stream for GPA updates")
+  Component(studentsApi, "StudentsController", "Web API Controller", "Endpoints for student read via StudentService")
+  Component(httpClients, "Typed HttpClients", "Infrastructure", "Calls StudentService, GradeService, NotificationService")
+}
+
+Rel(auth, gradesApi, "Protects")
+Rel(auth, studentsApi, "Protects")
+
+Rel(gradesApi, httpClients, "Uses")
+Rel(studentsApi, httpClients, "Uses")
+
+SHOW_LEGEND()
+@enduml
