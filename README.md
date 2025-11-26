@@ -45,10 +45,10 @@ cd ../..
 ```bash
 docker compose up --build
 ```
-#### For load balancing
+#### Run multiple gateway instances for load balancing
 
 ```bash
-docker compose up -d --scale gateway=3
+docker compose up --scale gateway=3
 ```
 
 ## 🧭 Step 3 — Access the System
