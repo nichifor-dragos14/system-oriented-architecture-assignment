@@ -137,6 +137,17 @@ services:
       - "9644"
     networks: [private]
 
+  redpanda-console:
+    image: redpandadata/console:latest
+    environment:
+      KAFKA_BROKERS: redpanda:9092
+    ports:
+      - "127.0.0.1:8082:8080"
+    depends_on:
+      - redpanda
+    networks: [private]
+
+
 volumes:
   pg_data:
   pgadmin_data:
